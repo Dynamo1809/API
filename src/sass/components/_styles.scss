@@ -1,0 +1,70 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-image: url('../images/bcg.png');
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input {
+  margin-left: 10px;
+  margin-top: 10px;
+  width: 250px;
+  height: 42px;
+  padding-left: 15px;
+  border-radius: 42px;
+  border: 3px solid #324b4e;
+  color: blue;
+  background: #e9e5dd;
+  outline: none;
+  font-size: 20px;
+}
+
+.country-list {
+  margin-left: 10px;
+  margin-top: 20px;
+}
+
+.country-discr {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row-reverse;
+}
+
+.text-div {
+  flex-direction: column;
+}
+
+.country-title {
+  text-align: center;
+  font-size: 60px;
+}
+
+.country-text {
+  font-size: 30px;
+}
+
+.country-languages-item {
+  font-size: 25px;
+}
+
+.country-list__item {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
