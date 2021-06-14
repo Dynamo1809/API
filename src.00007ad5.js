@@ -59,7 +59,7 @@ var e=require("process"),t=require("./utils"),r=require("./helpers/normalizeHead
 },{"./utils":"S1cf","./helpers/bind":"EDTP","./core/Axios":"OvAf","./core/mergeConfig":"OHvn","./defaults":"BXyq","./cancel/Cancel":"mIKj","./cancel/CancelToken":"tsWd","./cancel/isCancel":"V30M","./helpers/spread":"X8jb","./helpers/isAxiosError":"wICU"}],"dZBD":[function(require,module,exports) {
 module.exports=require("./lib/axios");
 },{"./lib/axios":"nUiQ"}],"SvwL":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;const e=require("axios"),t="https://app.ticketmaster.com/discovery/v2/",o="apu3UNEIGJkixbh9YXHiOuAG74i7PIT2";function r(r){const s=r.trim();return e.get(`${t}events.json?countryCode=${s}&apikey=${o}`).then(e=>e.data)}var s={fetchCounties:r};exports.default=s;
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;const e=require("axios"),t="https://app.ticketmaster.com/discovery/v2/",o="apu3UNEIGJkixbh9YXHiOuAG74i7PIT2";function r(r){const s=r.trim();return e.get(`${t}events.json?keyword=${s}&apikey=${o}`).then(e=>e.data)}var s={fetchCounties:r};exports.default=s;
 },{"axios":"dZBD"}],"pAws":[function(require,module,exports) {
 var define;
 var global = arguments[3];
@@ -78,4 +78,4 @@ var t=arguments[3],e="Expected a function",n=NaN,r="[object Symbol]",i=/^\s+|\s+
 },{}],"Focm":[function(require,module,exports) {
 "use strict";require("./sass/main");var e=u(require("./fetchCountries.js")),t=u(require("./templates/events.hbs")),n=u(require("./templates/country.hbs")),r=require("@pnotify/core");function u(e){return e&&e.__esModule?e:{default:e}}const s=require("lodash.debounce"),i=require("axios"),o={searchInput:document.querySelector(".searchInput"),eventList:document.querySelector(".event-list")};function c(t){a();const n=t.target.value;""!==n.trim()&&e.default.fetchCounties(n).then(e=>(console.log(e._embedded),d(e._embedded),e._embedded)).catch(l)}function d(e){const n=(0,t.default)(e);o.eventList.innerHTML=n}function a(){o.eventList.innerHTML=""}function l(e){console.log(e)}o.searchInput.addEventListener("input",s(c,500));
 },{"./sass/main":"clu1","./fetchCountries.js":"SvwL","./templates/events.hbs":"PO9u","./templates/country.hbs":"xAbl","@pnotify/core":"txz9","lodash.debounce":"PZFh","axios":"dZBD"}]},{},["Focm"], null)
-//# sourceMappingURL=/testing-api/src.c993a7cf.js.map
+//# sourceMappingURL=/api/src.00007ad5.js.map
