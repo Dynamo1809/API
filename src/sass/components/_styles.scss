@@ -4,7 +4,10 @@
   box-sizing: border-box;
 }
 
+// $set-gap:70px;
+
 body {
+  text-align: center;
   margin: 0;
   background-image: url('../images/bcg.png');
 }
@@ -16,8 +19,9 @@ img {
 }
 
 .container {
-  padding-left: 15px;
-  padding-right: 15px;
+  max-width: 1280px;
+  padding-left: 60px;
+  padding-right: 60px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -25,6 +29,7 @@ img {
 input {
   margin-left: 10px;
   margin-top: 10px;
+  margin-bottom: 46px;
   width: 250px;
   height: 42px;
   padding-left: 15px;
@@ -36,35 +41,52 @@ input {
   font-size: 20px;
 }
 
-.country-list {
-  margin-left: 10px;
-  margin-top: 20px;
+#Select {
+  width: 270px;
+  height: 40px;
+  border-radius: 42px;
+  padding-left: 15px;
+  border: 3px solid #324b4e;
+  color:#324b4e;
+  background: #e9e5dd;
+  outline: none;
+  font-size: 20px;
 }
 
-.country-discr {
+.event-list {
   display: flex;
-  justify-content: space-around;
-  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-left: -70px;
+  margin-bottom: -50px;
 }
 
-.text-div {
-  flex-direction: column;
-}
-
-.country-title {
+.event-discr {
+  margin-left: $set-gap;
+  margin-bottom: 50px;
+  // display: flex;
+  // flex-direction: column;
+  outline: 1px solid red;
   text-align: center;
-  font-size: 60px;
+  flex-basis: calc( 100% / 5 - #{$set-gap});
 }
 
-.country-text {
-  font-size: 30px;
+
+.event-title {
+  max-width: 180px;
+  text-align: center;
+  font-size: 20px;
 }
 
-.country-languages-item {
+.event-text {
+  font-size: 20px;
+}
+
+.event-languages-item {
   font-size: 25px;
 }
 
-.country-list__item {
+.event-list__item {
   font-size: 30px;
   margin-bottom: 10px;
 }

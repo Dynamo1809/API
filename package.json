@@ -3,22 +3,22 @@
   "version": "1.1.0",
   "description": "",
   "main": "src/index.js",
-  "homepage": "https://dynamo1809.github.io/testing-api/",
+  "homepage": "https://dynamo1809.github.io/api/",
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "parcel build src/*.html --public-url /testing-api/",
+    "build": "parcel build src/*.html --public-url /api/",
     "deploy": "gh-pages -d dist",
     "predeploy": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://dynamo1809.github.io/testing-api.git"
+    "url": "git+https://dynamo1809.github.io/api.git"
   },
   "keywords": [],
   "author": "DM>",
   "license": "ISC",
   "bugs": {
-    "url": "https://dynamo1809.github.io/testing-api/issues"
+    "url": "https://dynamo1809.github.io/api/issues"
   },
   "devDependencies": {
     "@pnotify/core": "^5.2.0",
