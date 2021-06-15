@@ -2,16 +2,15 @@
 import './sass/main';
 import API from './fetchEvents.js';
 import eventsTpl from './templates/events.hbs';
-import countryTpl from './templates/country.hbs';
-import { error } from '@pnotify/core';
+import countries from './json/countries.json';
+import selectorOptionsTpl from './templates/selectorOptions';
+// import countryTpl from './templates/country.hbs';
+// import { error } from '@pnotify/core';
 const debounce = require('lodash.debounce');
 const axios = require('axios');
 
 const IPSTACK_KEY = '07cf455019ad129b53694afd3f2a3f3d';
 const BASE_IPSTACK_URL = 'http://api.ipstack.com/';
-
-const BASE_URL = 'https://app.ticketmaster.com/discovery/v2/';
-const KEY_API = 'apu3UNEIGJkixbh9YXHiOuAG74i7PIT2';
 
 markupHomePage()
 
@@ -37,18 +36,20 @@ function markupHomePage() {
     if(response._embedded){
       createEventMarkup(response._embedded)
     } else{
-     return fetchSortEventsByDate()
-              .then(createEventMarkup)
+      console.log('2')
+     return API.fetchEvents()
+              .then(response => createEventMarkup(response._embedded))
     }
   })
   .catch(onFetchError);
   } )
 }
 
-function fetchSortEventsByDate () {
-    return axios.get(`${BASE_URL}events.json?sort=relevance,desc&apikey=${KEY_API}`)
-      .then(response => response.data._embedded); 
-}
+// function fetchSortEventsByDate () {
+//   console.log('2')
+//     return axios.get(`${BASE_URL}events.json?sort=relevance,desc&apikey=${KEY_API}`)
+//       .then(response => response.data._embedded); 
+// }
 
 // console.log("fetchUserCountryCodeByIp", fetchUserCountryCodeByIp())
 
@@ -57,7 +58,12 @@ function fetchSortEventsByDate () {
 const refs = {
   searchInput: document.querySelector('.searchInput'),
   eventList: document.querySelector('.event-list'),
+  select: document.getElementById('select')
 }
+
+console.log(refs.select)
+const optionsMarkup = createSelectorOptionsMarkup(countries);
+refs.select.insertAdjacentHTML('beforeend',optionsMarkup);
 
 refs.searchInput.addEventListener('input', debounce(onInputSearch, 500));
 
@@ -70,13 +76,20 @@ function onInputSearch(e) {
     return ;
   }
   
-  API.fetchEvents(serchQuery)
+  API.fetchEvents(serchQuery.trim())
     .then(response => {
-      console.log(response._embedded)
+      // console.log(response._embedded)
       createEventMarkup(response._embedded)
       return response._embedded;
     })
     .catch(onFetchError);
+}
+
+
+
+
+function createSelectorOptionsMarkup(options) {
+  return selectorOptionsTpl(options);
 }
 
 function createEventMarkup(event) {
