@@ -3,7 +3,7 @@ import './sass/main';
 import API from './fetchEvents.js';
 import eventsTpl from './templates/events.hbs';
 import countries from './json/countries.json';
-import selectorOptionsTpl from './templates/selectorOptions';
+import selectOptionsTpl from './templates/selectOptions';
 // import countryTpl from './templates/country.hbs';
 // import { error } from '@pnotify/core';
 const debounce = require('lodash.debounce');
@@ -11,6 +11,18 @@ const axios = require('axios');
 
 const IPSTACK_KEY = '07cf455019ad129b53694afd3f2a3f3d';
 const BASE_IPSTACK_URL = 'http://api.ipstack.com/';
+
+const refs = {
+  searchInput: document.querySelector('.searchInput'),
+  eventList: document.querySelector('.event-list'),
+  select: document.getElementById('select')
+}
+
+console.log(refs.select)
+
+const optionsMarkup = createSelectorOptionsMarkup(countries);
+refs.select.insertAdjacentHTML('beforeend',optionsMarkup);
+refs.searchInput.addEventListener('input', debounce(onInputSearch, 500));
 
 markupHomePage()
 
@@ -31,12 +43,16 @@ function markupHomePage() {
   fetchUserCountryCodeByIp()
   .then(countryCode =>{
     // console.log(countryCode);
+    // refs.select.value = countryCode;
     return API.fetchEvents(countryCode)
   .then(response => {
     if(response._embedded){
+      refs.select.value = countryCode;
+      console.log(refs.select.value)
       createEventMarkup(response._embedded)
     } else{
       console.log('2')
+      // refs.select.value = '';
      return API.fetchEvents()
               .then(response => createEventMarkup(response._embedded))
     }
@@ -52,20 +68,6 @@ function markupHomePage() {
 // }
 
 // console.log("fetchUserCountryCodeByIp", fetchUserCountryCodeByIp())
-
-  
-
-const refs = {
-  searchInput: document.querySelector('.searchInput'),
-  eventList: document.querySelector('.event-list'),
-  select: document.getElementById('select')
-}
-
-console.log(refs.select)
-const optionsMarkup = createSelectorOptionsMarkup(countries);
-refs.select.insertAdjacentHTML('beforeend',optionsMarkup);
-
-refs.searchInput.addEventListener('input', debounce(onInputSearch, 500));
 
 function onInputSearch(e) {
   resetPage();
@@ -85,11 +87,8 @@ function onInputSearch(e) {
     .catch(onFetchError);
 }
 
-
-
-
 function createSelectorOptionsMarkup(options) {
-  return selectorOptionsTpl(options);
+  return selectOptionsTpl(options);
 }
 
 function createEventMarkup(event) {
@@ -104,7 +103,6 @@ function resetPage() {
 function onFetchError (err) {
   console.log(err);
 }
-
 
   // if(events.length === 1){
   //   const eventMarkup = eventsTpl(events);
