@@ -1,3 +1,18 @@
 @import "./utils/variables";
-@import "./components/styles" ;
-@import "@pnotify/core/dist/BrightTheme";
+@import "./utils/base";
+
+@import './components/page-header';
+@import './components/hero';
+@import './components/event';
+@import './components/event-card';
+@import './components/pagination';
+@import './components/page-footer';
+@import './components/modal';
+@import './components/background';
+
+@import './components/first-load-animation.scss';
+
+
+
+// @import "./components/styles" ;
+// @import "@pnotify/core/dist/BrightTheme";

@@ -5,14 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Testing API</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <div class="container">
+    <include src="./partials/page-header.html"></include>
+    <include src="./partials/hero.html"></include>
+    <include src="./partials/event.html"></include>
+    <include src="./partials/pagination.html"></include>
+    <include src="./partials/page-fooer.html"></include>
+    <include src="./partials/modal.html"></include>
+    <include src="./partials/background.html"></include>
+
+    <!-- <div class="container">
       <input class="searchInput" placeholder="Start searching" type="text" >
-      <select name="select" id="select">
-        <option value="" selected>Choose country</option>
+      <select name="select" class="select">
+        <option selected hidden disabled>Choose country</option>
       </select>
-      <div class="event-list"></div>
+      <div class="event-list"></div> -->
     </div>
     <script src="./index.js"></script>
   </body>

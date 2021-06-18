@@ -1,5 +1,9 @@
 [
   {
+    "countryCode": "",
+    "country": "All countries"
+  },
+  {
     "countryCode": "US",
     "country": "USA"
   },
