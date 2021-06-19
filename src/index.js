@@ -36,7 +36,7 @@ async function fetchEvents(countryCode = ''){
       .then(response => {
         page += 1;
         // const embeddeds = response.data._embedded
-        // console.log(Array.from((response.data._embedded), (v,k) => k))
+        console.log( response)
         return response.data._embedded
       }) 
       // console.log('data', data._embedded )
@@ -59,6 +59,7 @@ async function markupHomePage() {
     console.log('markupHomePage ~ countryCode', countryCode)
     fetchEvents(countryCode).then(r => {
       if(!r) {
+        refs.select.value = '';
         fetchEvents('').then(r => createEventMarkup(r.events))
       }else{
         createEventMarkup(r.events)
@@ -227,3 +228,19 @@ refs.select.insertAdjacentHTML('beforeend',optionsMarkup);
 //     // return axios.get(`${BASE_DISCOVERY_URL}events.json?keyword=${searchQuery}&sort=date,name,asc&apikey=${DISCOVERY_KEY}`)
 //     // .then(response => response.data);     
 // }  
+
+
+// function fetchEventById() {
+//   const id = `https://app.ticketmaster.com/discovery/v2/events/LvZ18pyOjKEPAV8ZU8yym.json?apikey=${DISCOVERY_KEY}`;
+//   return fetch(id)
+//       .then(r => r.json())
+//       .then(data => {
+//           console.log('fetch', data)
+//           // console.log(data._embedded.events)
+//           return data
+//       })
+//       .catch(() => {
+//           errorFromServerById();
+//       });
+// }
+// fetchEventById()
