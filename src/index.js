@@ -16,12 +16,20 @@ const BASE_IPSTACK_URL = 'http://api.ipstack.com/';
 const refs = {
   searchInput: document.querySelector('.hero-form-field'),
   eventList: document.querySelector('.event-card-set'),
-  select: document.querySelector('.select')
+  select: document.querySelector('.select'),
+  form: document.querySelector('hero-form')
 }
 // console.log(refs.select)
 refs.searchInput.addEventListener('input', debounce(onInputSearch, 500));
+refs.select.addEventListener('change', onCountryChange);
 
 markupHomePage()
+
+function onCountryChange(e) {
+  console.log(e.currentTarget.value)
+
+  fetchEvents(e.currentTarget.value).then(r => appendEventsMarkup(r.events))
+}
 
 async function fetchEvents(countryCode = ''){ 
   let sizePage;
@@ -36,7 +44,7 @@ async function fetchEvents(countryCode = ''){
       .then(response => {
         page += 1;
         // const embeddeds = response.data._embedded
-        console.log( response)
+        console.log( response.data._embedded)
         return response.data._embedded
       }) 
       // console.log('data', data._embedded )
@@ -59,10 +67,13 @@ async function markupHomePage() {
     console.log('markupHomePage ~ countryCode', countryCode)
     fetchEvents(countryCode).then(r => {
       if(!r) {
-        refs.select.value = '';
-        fetchEvents('').then(r => createEventMarkup(r.events))
+        const randomCountryCode = getRandomCountryCode();
+        console.log('fetchEvents ~ randomCountryCode', randomCountryCode)
+        
+        refs.select.value = randomCountryCode;
+        fetchEvents(randomCountryCode).then(r => appendEventsMarkup(r.events))
       }else{
-        createEventMarkup(r.events)
+        appendEventsMarkup(r.events)
         refs.select.value = countryCode;
       }
     }) 
@@ -147,7 +158,20 @@ function createSelectorOptionsMarkup(options) {
   return selectOptionsTpl(options);
 }
 
-function createEventMarkup(event) {
+function getRandomCountryCode() {
+  const allCountryCodes = countries.map(country => country.countryCode)
+  console.log('getRandomCountryCode ~ allCountryCodes', allCountryCodes)
+  const countriesLengt = allCountryCodes.length
+  console.log('getRandomCountryCode ~ countriesLengt', countriesLengt)
+  const randomNumber = Math.floor(Math.random() * (countriesLengt - 0) + 0);
+  console.log('getRandomCountryCode ~ randomNumber', randomNumber)
+  console.log('random Code', allCountryCodes[randomNumber])
+  return allCountryCodes[randomNumber];
+}
+
+// getRandomCountryCode();
+
+function appendEventsMarkup(event) {
   const eventMarkup = eventsTpl(event);
   refs.eventList.innerHTML = eventMarkup;
 
