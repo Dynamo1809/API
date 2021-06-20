@@ -62,21 +62,34 @@ async function fetchUserCountryCodeByIp() {
 }
       // const data = await fetchEvents(countryCode)
 async function markupHomePage() {
+  const randomCountryCode = getRandomCountryCode();
+  
   try{
-    const countryCode = await fetchUserCountryCodeByIp();
-    console.log('markupHomePage ~ countryCode', countryCode)
-    fetchEvents(countryCode).then(r => {
-      if(!r) {
-        const randomCountryCode = getRandomCountryCode();
-        console.log('fetchEvents ~ randomCountryCode', randomCountryCode)
+    fetchEvents(randomCountryCode).then(r => {
+      refs.select.value = randomCountryCode;
+      appendEventsMarkup(r.events);
+    })
+
+    // const countryCode = await fetchUserCountryCodeByIp();
+    // console.log('markupHomePage ~ countryCode', countryCode)
+    // fetchEvents(countryCode).then(r => {
+    //   if(!r) {
+        // const randomCountryCode = getRandomCountryCode();
+        // console.log('fetchEvents ~ randomCountryCode', randomCountryCode)
         
-        refs.select.value = randomCountryCode;
-        fetchEvents(randomCountryCode).then(r => appendEventsMarkup(r.events))
-      }else{
-        appendEventsMarkup(r.events)
-        refs.select.value = countryCode;
-      }
-    }) 
+    //     refs.select.value = randomCountryCode;
+    //     fetchEvents(randomCountryCode).then(r => appendEventsMarkup(r.events))
+    //   }else{
+    //     appendEventsMarkup(r.events)
+    //     refs.select.value = countryCode;
+    //   }
+    // }) 
+    }catch (error){
+      console.log(error)
+    }
+  }
+
+
     //   refs.select.value = '';
     //   fetchEvents('').then(createEventMarkup )
     // }else{
@@ -99,10 +112,8 @@ async function markupHomePage() {
     //             })
     //   }
     // })
-    }catch (error){
-      console.log(error)
-    }
-}
+    
+
 
 // refs.select.value = countryCode;
         // console.log(response._embedded.events)
