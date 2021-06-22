@@ -10,9 +10,6 @@ const axios = require('axios');
 const BASE_DISCOVERY_URL = 'https://app.ticketmaster.com/discovery/v2/';
 const DISCOVERY_KEY = 'apu3UNEIGJkixbh9YXHiOuAG74i7PIT2';
 
-const IPSTACK_KEY = '07cf455019ad129b53694afd3f2a3f3d';
-const BASE_IPSTACK_URL = 'http://api.ipstack.com/';
-
 const refs = {
   searchInput: document.querySelector('.hero-form-field'),
   eventList: document.querySelector('.event-card-set'),
@@ -23,7 +20,33 @@ const refs = {
 refs.searchInput.addEventListener('input', debounce(onInputSearch, 500));
 refs.select.addEventListener('change', onCountryChange);
 
-markupHomePage()
+async function hello() {
+  const ok = await axios.get(`${BASE_DISCOVERY_URL}events.json?countryCode=US
+  &sort=date,name,asc&size=150&apikey=${DISCOVERY_KEY}`)
+    .then(response => { 
+      // const currentTime = Date.now();
+      // console.log( response.data._embedded.events.filter(event => (currentTime - 345600000) <= new Date(event.dates.start.localDate).getTime()))
+      console.log( response.data._embedded.events)
+      // console.log('hello ~ currentTime', currentTime)    
+      // console.log(new Date("2021-06-19").getTime())
+      
+      // .map(event => event.dates.start.localDate))
+      return response.data._embedded
+    }) 
+    return ok ;
+}
+
+hello()
+
+
+markupHomePage();
+
+
+async function fetchUserCountryCodeByIp() {
+      const userCountryCode = await axios.get('https://ipapi.co/country/').then(response => response.data);         
+        return userCountryCode;
+  }
+
 
 function onCountryChange(e) {
   console.log(e.currentTarget.value)
@@ -43,77 +66,42 @@ async function fetchEvents(countryCode = ''){
     &sort=date,name,asc&size=${sizePage}&page=${page}&apikey=${DISCOVERY_KEY}`)
       .then(response => {
         page += 1;
-        // const embeddeds = response.data._embedded
-        console.log( response.data._embedded)
+        
+        // console.log( response.data._embedded)
         return response.data._embedded
       }) 
-      // console.log('data', data._embedded )
       return data;
   // .forEach(r => console.log(r))
   // Object.values()
 }  
 
-// console.log(Array.from({events:[1,2,3,4,5,6,7,8,9,]}, (v,k) => k))
-
-async function fetchUserCountryCodeByIp() {
-    const userCountryCode = await axios.get(`${BASE_IPSTACK_URL}check?access_key=${IPSTACK_KEY}`)
-      .then(response => response.data.country_code);
-    return userCountryCode;
-}
-      // const data = await fetchEvents(countryCode)
 async function markupHomePage() {
   const randomCountryCode = getRandomCountryCode();
-  
+  const currentTime = Date.now();
   try{
-    fetchEvents(randomCountryCode).then(r => {
-      refs.select.value = randomCountryCode;
-      appendEventsMarkup(r.events);
-    })
+    const countryCode = await fetchUserCountryCodeByIp();
+    // console.log('kod v markuppe', countryCode)
+    fetchEvents(countryCode).then(r => {
+      if(!r) {
+        refs.select.value = randomCountryCode;
+        fetchEvents(randomCountryCode)
+          // .then(r => appendEventsMarkup(r.events))
+          .then(r => {
+            console.log('markup', r.events)
+            while(r.events.filter(event => (currentTime - 345600000) <= new Date(event.dates.start.localDate).getTime())) {
 
-    // const countryCode = await fetchUserCountryCodeByIp();
-    // console.log('markupHomePage ~ countryCode', countryCode)
-    // fetchEvents(countryCode).then(r => {
-    //   if(!r) {
-        // const randomCountryCode = getRandomCountryCode();
-        // console.log('fetchEvents ~ randomCountryCode', randomCountryCode)
-        
-    //     refs.select.value = randomCountryCode;
-    //     fetchEvents(randomCountryCode).then(r => appendEventsMarkup(r.events))
-    //   }else{
-    //     appendEventsMarkup(r.events)
-    //     refs.select.value = countryCode;
-    //   }
-    // }) 
+            }
+            appendEventsMarkup(r.events.filter(event => (currentTime - 345600000) <= new Date(event.dates.start.localDate).getTime()))  
+          })
+      } else{
+        appendEventsMarkup(r.events)
+        refs.select.value = countryCode;
+      }
+    })
     }catch (error){
       console.log(error)
     }
   }
-
-
-    //   refs.select.value = '';
-    //   fetchEvents('').then(createEventMarkup )
-    // }else{
-    //   refs.select.value = countryCode;
-    //   fetchEvents(countryCode).then(r => createEventMarkup(r.events))
-    // }
-    // .catch(err =>console.log(err))
-    // .then(countryCode => {
-    //    refs.select.value = countryCode;
-    //    fetchEvents(countryCode).then( r => createEventMarkup(r))
-    //    return fetchEvents(countryCode)
-    // })
-    // .then(response => {
-    //   if(!response){
-    //     console.log(response)
-    //     refs.select.value = '';
-    //     return fetchEvents()
-    //             .then(response => {
-    //               return createEventMarkup(response._embedded)
-    //             })
-    //   }
-    // })
-    
-
 
 // refs.select.value = countryCode;
         // console.log(response._embedded.events)
@@ -170,17 +158,12 @@ function createSelectorOptionsMarkup(options) {
 }
 
 function getRandomCountryCode() {
-  const allCountryCodes = countries.map(country => country.countryCode)
-  console.log('getRandomCountryCode ~ allCountryCodes', allCountryCodes)
-  const countriesLengt = allCountryCodes.length
-  console.log('getRandomCountryCode ~ countriesLengt', countriesLengt)
+  const allCountryCodes = countries.map(country => country.countryCode);
+  const countriesLengt = allCountryCodes.length;
   const randomNumber = Math.floor(Math.random() * (countriesLengt - 0) + 0);
-  console.log('getRandomCountryCode ~ randomNumber', randomNumber)
-  console.log('random Code', allCountryCodes[randomNumber])
+
   return allCountryCodes[randomNumber];
 }
-
-// getRandomCountryCode();
 
 function appendEventsMarkup(event) {
   const eventMarkup = eventsTpl(event);
@@ -199,13 +182,6 @@ function onFetchError (err) {
 const optionsMarkup = createSelectorOptionsMarkup(countries);
 refs.select.insertAdjacentHTML('beforeend',optionsMarkup);
 
-  // if(events.length === 1){
-  //   const eventMarkup = eventsTpl(events);
-  //   refs.eventList.innerHTML = countryMarkup; 
-  // }else if(countries.length >= 2 && countries.length <= 10){
-  //   const countriesMarkup = eventsTpl(countries);
-  //   refs.countryList.innerHTML = countriesMarkup;
-  // }else if(events.length > 10){
   //    error({
   //     text: 'Too many matches found. Please enter a more specific query!',
   //     mode: 'light',
